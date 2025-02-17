@@ -19,7 +19,7 @@ export default function Header() {
 
       <section className="flex justify-center items-center gap-4">
         <ThemeToggle />
-        <Button className="border-blue-600" variant="outline">
+        <Button className="border-blue-600 font-bold" variant="outline">
           Login
         </Button>
       </section>

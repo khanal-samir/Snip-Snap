@@ -13,7 +13,7 @@ export default function Hero() {
           Collaborative snippet sharing app
           <br /> Just SnipSnap it to me.
         </p>
-        <Button className="w-fit">Get Started</Button>
+        <Button className="w-fit font-bold">Get Started</Button>
       </section>
 
       <Image
