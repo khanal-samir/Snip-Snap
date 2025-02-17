@@ -1,14 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui/theme";
-import Image from "next/image";
+import Features from "@/components/base/Features";
+import Footer from "@/components/base/Footer";
+import GetStarted from "@/components/base/GetStarted";
+import Header from "@/components/base/Header";
+import Hero from "@/components/base/Hero";
+import Logos from "@/components/base/Logos";
 
 export default function Home() {
   return (
-    <div>
-      hello
-      <Button>Hello</Button>
-      <Image src="/Hero.png" width={500} height={500} alt="Logo" />
-      <ThemeToggle />
+    <div className="w-full min-h-screen space-y-10">
+      <Header />
+      <Hero />
+      <Logos />
+      <Features />
+      <GetStarted />
+      <Footer />
     </div>
   );
 }
