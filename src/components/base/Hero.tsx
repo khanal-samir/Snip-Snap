@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -13,7 +14,9 @@ export default function Hero() {
           Collaborative snippet sharing app
           <br /> Just SnipSnap it to me.
         </p>
-        <Button className="w-fit font-bold">Get Started</Button>
+        <Link href="/register">
+          <Button className="w-fit font-bold">Get Started</Button>
+        </Link>
       </section>
 
       <Image

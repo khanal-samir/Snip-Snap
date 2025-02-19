@@ -16,7 +16,7 @@ export function GenderSelect({ name = "gender" }: GenderSelectProps) {
   return (
     <Select name={name}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select gender" />
+        <SelectValue placeholder="Select gender for your avatar" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="male">Male</SelectItem>

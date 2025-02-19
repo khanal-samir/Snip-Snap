@@ -57,6 +57,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
         marquee: {
           from: {
             transform: "translateX(0)",
@@ -75,6 +79,7 @@ export default {
         },
       },
       animation: {
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
         marquee: "marquee var(--duration) infinite linear",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
       },

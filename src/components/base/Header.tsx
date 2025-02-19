@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "../ui/theme";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -20,9 +21,12 @@ export default function Header() {
 
       <section className="flex justify-center items-center gap-4">
         <ThemeToggle />
-        <Button className="border-blue-600 font-bold" variant="outline">
-          Login
-        </Button>
+        <Link href="/login">
+          {" "}
+          <Button className="border-blue-600 font-bold" variant="outline">
+            Login
+          </Button>
+        </Link>
       </section>
     </header>
   );
