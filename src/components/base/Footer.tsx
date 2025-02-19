@@ -9,8 +9,9 @@ const Footer = () => {
           src="/logo.svg"
           alt="logo"
           className="w-10 h-10 inline"
-          width={500}
-          height={500}
+          width={100}
+          height={100}
+          loading="lazy" //default
         />
         <span>Snip Snap</span>
       </div>

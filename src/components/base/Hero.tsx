@@ -20,6 +20,7 @@ export default function Hero() {
         src="/Hero.svg"
         width={500}
         height={500}
+        priority
         alt="hero-1"
         className="hidden sm:block lg:w-full lg:h-full"
       />

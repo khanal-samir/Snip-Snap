@@ -12,3 +12,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Gender {
+  male
+  female
+  others
+}
+
+model User {
+  id                       String    @id @default(cuid())
+  email                    String    @unique
+  username                 String    @unique @db.VarChar(191)
+  gender                   Gender
+  image                    String
+  isVerified               Boolean   @default(false)
+  verifyToken              String?
+  verifyTokenExpiry        DateTime?
+  passwordResetToken       String?
+  passwordResetTokenExpiry DateTime?
+  createdAt                DateTime  @default(now())
+
+  @@index([username])
+}

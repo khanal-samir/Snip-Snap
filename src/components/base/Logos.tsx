@@ -39,6 +39,8 @@ export default function Logos() {
           height={100}
           alt={item.alt}
           key={index}
+          quality={100}
+          priority
         />
       ))}
     </div>

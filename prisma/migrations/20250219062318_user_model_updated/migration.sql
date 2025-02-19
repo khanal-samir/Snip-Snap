@@ -1,0 +1,5 @@
+
+-- AlterTable
+ALTER TABLE "User" DROP COLUMN "bio",
+DROP COLUMN "fullName",
+ALTER COLUMN "username" SET DATA TYPE VARCHAR(191);

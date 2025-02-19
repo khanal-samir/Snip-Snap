@@ -9,8 +9,9 @@ export default function Header() {
       <div className="flex gap-4 items-center">
         <Image
           src="/logo.svg"
-          width={500}
-          height={500}
+          width={100}
+          height={100}
+          priority
           alt="logo"
           className="w-fit"
         />
