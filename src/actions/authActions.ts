@@ -2,12 +2,20 @@
 import prisma from "@/lib/db";
 import { hash } from "bcryptjs";
 import { IResponse } from "..";
-import { registerSchema, verifyEmailSchema } from "@/schema/userSchema";
+import {
+  forgotPasswordSchema,
+  registerSchema,
+  verifyEmailSchema,
+} from "@/schema/userSchema";
 import { ZodError } from "zod";
 import { formatError } from "@/lib/utils";
 import { createAvatar } from "@dicebear/core";
 import { botttsNeutral } from "@dicebear/collection";
-import { sendVerificationEmail } from "@/helpers/sendEmail";
+import {
+  sendPasswordResetLink,
+  sendVerificationEmail,
+} from "@/helpers/sendEmail";
+import { v4 as uuid } from "uuid";
 
 export async function handleRegister(
   _prevState: unknown,
@@ -157,6 +165,63 @@ export async function VerifyEmail(
     return {
       message: "Something went wrong while verifying email.",
       status: 500,
+    };
+  }
+}
+
+export async function forgotPassword(
+  prevState: unknown,
+  formData: FormData
+): Promise<IResponse> {
+  try {
+    const email = formData.get("email");
+
+    const payload = forgotPasswordSchema.safeParse({ email });
+    if (payload.error) {
+      const errors = formatError(payload.error);
+      return {
+        message: "Please provide valid email address",
+        errors: errors,
+        status: 422,
+      };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: payload.data.email,
+        isVerified: true,
+      },
+    });
+    if (!user) {
+      return {
+        message: `User with ${payload.data.email} doesn't exists or email is not verified.`,
+        status: 404,
+      };
+    }
+
+    //pass token
+    const passToken = await hash(uuid(), 10);
+    await prisma.user.update({
+      data: {
+        passwordResetToken: passToken,
+        passwordResetTokenExpiry: new Date(Date.now() + 3600000),
+      },
+      where: {
+        email: payload.data.email,
+      },
+    });
+
+    const link = `${process.env.NEXT_PUBLIC_API_URL}/change-password?email=${payload.data.email}&token=${passToken}`;
+    await sendPasswordResetLink(user.username, user.email, link);
+    return {
+      status: 200,
+      message: "Password reset link send. Please check your email.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      status: 500,
+      message: "Something went wrong while sending password reset email.",
     };
   }
 }
