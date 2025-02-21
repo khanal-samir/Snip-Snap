@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/providers/theme-provider";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
+        <Toaster position="top-center" richColors closeButton />
         <ThemeProvider> {children}</ThemeProvider>
       </body>
     </html>

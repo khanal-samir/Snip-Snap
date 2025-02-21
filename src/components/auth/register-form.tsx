@@ -4,12 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Password from "../common/Password";
 import { SubmitButton } from "../common/SubmitBtn";
-import { GenderSelect } from "../common/GenderSelect";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { handleRegister } from "@/actions/authActions";
-import { IState } from "@/index";
+import { IResponse as IState } from "@/index";
 import Link from "next/link";
 import VerifyToken from "./verify-token";
+import { toast } from "sonner";
 
 export default function RegisterForm({
   className,
@@ -19,10 +19,27 @@ export default function RegisterForm({
     status: 0,
     message: "",
     errors: {},
-    data: {},
   };
-  const [active, setIsActive] = useState(true);
+  const [active, setIsActive] = useState(false);
   const [state, formAction] = useActionState(handleRegister, initState);
+  const [inputField, setInputField] = useState({
+    username: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    if (state.status === 201) {
+      toast.success(state.message);
+      setInputField({ username: "", email: "" });
+      setIsActive(true);
+    }
+    if (state.status && state.status >= 400 && state.status !== 422) {
+      toast.error(state.message);
+    }
+    if (state.status === 422) {
+      toast.warning(state.message);
+    }
+  }, [state]);
   return (
     <>
       <form
@@ -44,8 +61,17 @@ export default function RegisterForm({
               id="username"
               name="username"
               placeholder="JohnDoe@123"
+              value={inputField.username}
+              onChange={(e) =>
+                setInputField({ ...inputField, username: e.target.value })
+              }
               required
             />
+            {state.errors && (
+              <span className="text-red-600 text-sm">
+                {state.errors.username}
+              </span>
+            )}
           </div>
 
           <div className="grid gap-2">
@@ -54,19 +80,26 @@ export default function RegisterForm({
               id="email"
               type="email"
               name="email"
+              value={inputField.email}
+              onChange={(e) =>
+                setInputField({ ...inputField, email: e.target.value })
+              }
               placeholder="m@example.com"
               required
             />
+            {state.errors && (
+              <span className="text-red-600 text-sm">{state.errors.email}</span>
+            )}
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Password indentifer="passsword" />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="gender">Gender</Label>
-            <GenderSelect />
+            <Password indentifer="password" />
+            {state.errors && (
+              <span className="text-red-600 text-sm">
+                {state.errors.password}
+              </span>
+            )}
           </div>
           <SubmitButton />
         </div>

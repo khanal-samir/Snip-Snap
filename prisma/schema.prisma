@@ -13,17 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Gender {
-  male
-  female
-  others
-}
-
 model User {
   id                       String    @id @default(cuid())
   email                    String    @unique
-  username                 String    @unique @db.VarChar(191)
-  gender                   Gender
+  username                 String
+  password                 String
   image                    String
   isVerified               Boolean   @default(false)
   verifyToken              String?

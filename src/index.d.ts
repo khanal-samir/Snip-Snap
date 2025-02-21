@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // for form state
-export interface IState {
-  status: number;
+export interface IResponse {
+  status?: number;
+  success?: boolean;
   message: string;
   errors?: any;
   data?: any;
