@@ -30,7 +30,6 @@ export default function RegisterForm({
   useEffect(() => {
     if (state.status === 201) {
       toast.success(state.message);
-      setInputField({ username: "", email: "" });
       setIsActive(true);
     }
     if (state.status && state.status >= 400 && state.status !== 422) {
@@ -113,7 +112,7 @@ export default function RegisterForm({
       <VerifyToken
         isActive={active}
         setIsActive={setIsActive}
-        email="gdssamir@gmail.com"
+        email={inputField.email}
       />
     </>
   );

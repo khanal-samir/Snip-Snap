@@ -2,7 +2,7 @@
 import prisma from "@/lib/db";
 import { hash } from "bcryptjs";
 import { IResponse } from "..";
-import { registerSchema } from "@/schema/userSchema";
+import { registerSchema, verifyEmailSchema } from "@/schema/userSchema";
 import { ZodError } from "zod";
 import { formatError } from "@/lib/utils";
 import { createAvatar } from "@dicebear/core";
@@ -92,6 +92,71 @@ export async function handleRegister(
     return {
       status: 500,
       message: "Error occured",
+    };
+  }
+}
+
+export async function VerifyEmail(
+  _prevState: unknown,
+  formData: FormData
+): Promise<IResponse> {
+  try {
+    const email = formData.get("email");
+    const token = formData.get("token");
+
+    const payload = verifyEmailSchema.safeParse({ email, token });
+
+    if (!payload.success && payload.error) {
+      const errors = formatError(payload.error);
+      return {
+        message: "Please provide valid information for account verification.",
+        errors: errors,
+        status: 422,
+      };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: payload.data.email,
+        verifyTokenExpiry: {
+          gte: new Date(Date.now()),
+        },
+      },
+    });
+    if (!user) {
+      return {
+        message: "OTP token time has expired. Please try to again.",
+        status: 404,
+      };
+    }
+
+    const isTokenValid = user.verifyToken === payload.data.token;
+    if (isTokenValid) {
+      await prisma.user.update({
+        data: {
+          isVerified: true,
+          verifyToken: null,
+          verifyTokenExpiry: null,
+        },
+        where: {
+          email: payload.data.email,
+        },
+      });
+      return {
+        message: "Account verified successfully. Please proceed to login.",
+        status: 200,
+      };
+    } else {
+      return {
+        message: "OTP token is invalid. Please try again.",
+        status: 400,
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "Something went wrong while verifying email.",
+      status: 500,
     };
   }
 }

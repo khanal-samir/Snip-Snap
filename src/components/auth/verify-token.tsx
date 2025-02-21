@@ -14,14 +14,36 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import type { IToken } from "@/index";
+import type { IResponse, IToken } from "@/index";
 import { Input } from "../ui/input";
-
+import { useActionState, useEffect } from "react";
+import { VerifyEmail } from "@/actions/authActions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const VerifyToken = ({
   isActive = false,
   setIsActive,
   email = null,
 }: IToken) => {
+  const initState: IResponse = {
+    message: "",
+    errors: "",
+  };
+  const router = useRouter();
+  const [state, formAction] = useActionState(VerifyEmail, initState);
+  useEffect(() => {
+    if (state.status === 200) {
+      toast.success(state.message);
+      setIsActive(false);
+      router.push("/login");
+    }
+    if (state.status && state.status >= 400 && state.status !== 422) {
+      toast.error(state.message);
+    }
+    if (state.status == 422) {
+      toast.warning(state.message);
+    }
+  }, [state]);
   return (
     <Dialog open={isActive} onOpenChange={setIsActive}>
       <DialogContent
@@ -45,8 +67,14 @@ const VerifyToken = ({
           </DialogDescription>
         </DialogHeader>
 
-        <form className="mt-4 flex flex-col items-center justify-center gap-4">
+        <form
+          className="mt-4 flex flex-col items-center justify-center gap-4"
+          action={formAction}
+        >
           <Input className="hidden" name="email" value={email!} readOnly />
+          {state.errors && (
+            <span className="text-red-600 text-sm">{state.errors?.email}</span>
+          )}
 
           <InputOTP maxLength={6} name="token" className="gap-2">
             <InputOTPGroup className="gap-2">
@@ -79,6 +107,9 @@ const VerifyToken = ({
               />
             </InputOTPGroup>
           </InputOTP>
+          {state.errors && (
+            <span className="text-red-600 text-sm">{state.errors.token}</span>
+          )}
 
           <div className="flex w-full flex-col gap-4">
             <SubmitButton />
