@@ -6,6 +6,7 @@ import {
   forgotPasswordSchema,
   registerSchema,
   verifyEmailSchema,
+  changePasswordSchema,
 } from "@/schema/userSchema";
 import { ZodError } from "zod";
 import { formatError } from "@/lib/utils";
@@ -222,6 +223,81 @@ export async function forgotPassword(
     return {
       status: 500,
       message: "Something went wrong while sending password reset email.",
+    };
+  }
+}
+
+export async function changePassword(
+  _prevState: unknown,
+  formData: FormData
+): Promise<IResponse> {
+  try {
+    const email = formData.get("email");
+    const token = formData.get("token");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirm-password");
+
+    const payload = changePasswordSchema.safeParse({
+      email,
+      token,
+      password,
+      confirmPassword,
+    });
+    if (payload.error) {
+      const errors = formatError(payload.error);
+      return {
+        message: "Please provide valid information to reset password.",
+        status: 422,
+        errors,
+      };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: payload.data.email,
+        passwordResetTokenExpiry: {
+          gte: new Date(Date.now()),
+        },
+      },
+    });
+
+    // user already checked in forgot password
+    if (!user) {
+      return {
+        message: `Password reset link has expired. Plese try again`,
+        status: 404,
+      };
+    }
+
+    const isTokenValid =
+      user.passwordResetToken && payload.data.token === user.passwordResetToken;
+    if (!isTokenValid) {
+      return {
+        message: `Password reset token is invalid.`,
+        status: 400,
+      };
+    }
+
+    payload.data.password = await hash(payload.data.password, 10);
+    await prisma.user.update({
+      data: {
+        password: payload.data.password,
+        passwordResetToken: null,
+        passwordResetTokenExpiry: null,
+      },
+      where: {
+        email: payload.data.email,
+      },
+    });
+    return {
+      message: `Password reset successfully. Please procced to login`,
+      status: 200,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "Something went wrong while reseting password.",
+      status: 500,
     };
   }
 }
