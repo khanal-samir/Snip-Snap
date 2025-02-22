@@ -12,10 +12,7 @@ import { ZodError } from "zod";
 import { formatError } from "@/lib/utils";
 import { createAvatar } from "@dicebear/core";
 import { botttsNeutral } from "@dicebear/collection";
-import {
-  sendPasswordResetLink,
-  sendVerificationEmail,
-} from "@/helpers/sendEmail";
+import sendMail from "@/helpers/sendEmail";
 import { v4 as uuid } from "uuid";
 
 export async function handleRegister(
@@ -82,7 +79,13 @@ export async function handleRegister(
         },
       });
     }
-    await sendVerificationEmail(payload.email, payload.username, token);
+    const mailSend = await sendMail(payload.email, "VERIFY", token);
+    if (!mailSend) {
+      return {
+        status: 500,
+        message: "Something went wrong while sending OTP. Please try again.",
+      };
+    }
 
     return {
       status: 201,
@@ -213,7 +216,16 @@ export async function forgotPassword(
     });
 
     const link = `${process.env.NEXT_PUBLIC_API_URL}/change-password?email=${payload.data.email}&token=${passToken}`;
-    await sendPasswordResetLink(user.username, user.email, link);
+
+    const mailSend = await sendMail(user.email, "RESET", link);
+
+    if (!mailSend)
+      return {
+        status: 500,
+        message:
+          "Something went wrong while sending password reset email. Please try again.",
+      };
+
     return {
       status: 200,
       message: "Password reset link send. Please check your email.",
