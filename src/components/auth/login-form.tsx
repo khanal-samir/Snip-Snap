@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,16 +7,45 @@ import Image from "next/image";
 import Password from "../common/Password";
 import Link from "next/link";
 import { SubmitButton } from "../common/SubmitBtn";
+import { IResponse } from "@/index";
+import { useActionState, useEffect } from "react";
+import { checkLogin } from "@/actions/authActions";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const initState: IResponse = {
+    errors: {},
+    message: "",
+    status: 0,
+    data: {},
+  };
+  const [state, formAction] = useActionState(checkLogin, initState);
+  useEffect(() => {
+    if (state.status === 200) {
+      signIn("credentials", {
+        email: state.data?.email,
+        password: state.data?.password,
+        redirect: true,
+        callbackUrl: "/dashboard",
+      });
+      toast.success(state.message);
+    }
+    if (state.status && state.status >= 400 && state.status !== 422) {
+      toast.error(state.message);
+    }
+    if (state.status === 422) {
+      toast.warning(state.message);
+    }
+  }, [state]);
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden shadow-xl">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" action={formAction}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -29,9 +59,13 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   placeholder="m@example.com"
                   required
                 />
+                <span className="text-sm text-red-600">
+                  {state.errors?.email}
+                </span>
               </div>
 
               <div className="grid gap-2">
@@ -45,6 +79,9 @@ export function LoginForm({
                   </Link>
                 </div>
                 <Password indentifer="password" />
+                <span className="text-sm text-red-600">
+                  {state.errors?.password}
+                </span>
               </div>
 
               <SubmitButton />

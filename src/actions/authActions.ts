@@ -1,12 +1,13 @@
 "use server";
 import prisma from "@/lib/db";
-import { hash } from "bcryptjs";
+import { hash, compare } from "bcryptjs";
 import { IResponse } from "..";
 import {
   forgotPasswordSchema,
   registerSchema,
   verifyEmailSchema,
   changePasswordSchema,
+  loginSchema,
 } from "@/schema/userSchema";
 import { ZodError } from "zod";
 import { formatError } from "@/lib/utils";
@@ -310,6 +311,60 @@ export async function changePassword(
     return {
       message: "Something went wrong while reseting password.",
       status: 500,
+    };
+  }
+}
+
+export async function checkLogin(
+  prevState: unknown,
+  formData: FormData
+): Promise<IResponse> {
+  try {
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    const payload = loginSchema.safeParse({ email, password });
+    if (payload.error) {
+      const errors = formatError(payload.error);
+      return {
+        status: 422,
+        message: "Please provide valid credentials.",
+        errors: errors,
+      };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: payload.data.email,
+        isVerified: true,
+      },
+    });
+
+    if (!user) {
+      return {
+        status: 400,
+        message: "User not found or Email is not verified.",
+      };
+    }
+
+    const isPassValid = await compare(payload.data.password, user.password);
+    if (!isPassValid) {
+      return {
+        status: 400,
+        message: "Password is incorrect. Please try again",
+      };
+    }
+
+    return {
+      status: 200,
+      data: { email: payload.data.email, password: payload.data.password },
+      message: "User login successfull. Welcome to Snip Snap.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      status: 500,
+      message: "Something went wrong while login. Please try again",
     };
   }
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
-
+import { headers } from "next/headers"; // This will throw an error if used in client component
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -12,19 +12,21 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/providers/theme-provider";
-import { Toaster } from "sonner";
+import AuthProvider from "@/providers/Authprovider";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  headers();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased`}>
-        <Toaster position="top-center" richColors closeButton />
-        <ThemeProvider> {children}</ThemeProvider>
-      </body>
+      <AuthProvider>
+        <body className={`${inter.variable} antialiased`}>
+          <ThemeProvider> {children}</ThemeProvider>
+        </body>
+      </AuthProvider>
     </html>
   );
 }

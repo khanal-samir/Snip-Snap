@@ -14,3 +14,16 @@ export type IToken = {
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   email: string | null;
 };
+
+// next auth
+import { ISODateString } from "next-auth";
+export type CustomSession = {
+  user?: CustomUser;
+  expires: ISODateString;
+};
+
+export type CustomUser = {
+  id?: string | null;
+  email?: string | null; // for session type safety
+  isVerified?: boolean;
+};
