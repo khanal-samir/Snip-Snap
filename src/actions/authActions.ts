@@ -277,7 +277,7 @@ export async function changePassword(
     // user already checked in forgot password
     if (!user) {
       return {
-        message: `Password reset link has expired. Plese try again`,
+        message: `Password reset link has expired. Please try again`,
         status: 404,
       };
     }

@@ -19,7 +19,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  headers();
+  headers(); // to check server side
   return (
     <html lang="en" suppressHydrationWarning>
       <AuthProvider>
