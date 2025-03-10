@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/common/app-sidebar";
-import { TopNav } from "@/components/top-nav";
+import { TopNav } from "@/components/common/top-nav";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   return (

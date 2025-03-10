@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { ThemeToggle } from "./ui/theme";
+import { ThemeToggle } from "../ui/theme";
 
 export function TopNav() {
   return (

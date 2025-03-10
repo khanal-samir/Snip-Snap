@@ -44,7 +44,11 @@ export class ApiResponse {
     return new ApiResponse(401, null, message).send();
   }
 
-  static badRequest(message: string = "Invalid request") {
-    return new ApiResponse(400, null, message).send();
+  static badRequest(
+    status: number = 400,
+    message: string = "Invalid request",
+    data: any = null
+  ) {
+    return new ApiResponse(status, data, message).send();
   }
 }
