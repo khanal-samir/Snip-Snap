@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { snippetSchema } from "@/schema/snippetSchema";
 import { ApiResponse } from "@/lib/apiResponse";
-
 import prisma from "@/lib/db";
 import getUserId from "@/helpers/getUserId";
 
@@ -41,9 +40,42 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       },
     });
 
-    return ApiResponse.success(201, snippet, "Snippet created successfully");
+    return ApiResponse.success(201, snippet, "Snippet created successfully.");
   } catch (error) {
-    console.error(error);
-    return ApiResponse.error("Someting went wrong while creating snippet");
+    console.error("Error create snippet", error);
+    return ApiResponse.error("Someting went wrong while creating snippet.");
+  }
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  try {
+    //authentication
+    const result = await getUserId();
+    if (result instanceof Response) return result;
+
+    //pagination
+    const queries = req.nextUrl.searchParams;
+    const limit = Number(queries.get("limit")) || 1;
+    const page = Number(queries.get("page")) || 10;
+    const skip = (page - 1) * limit; // how many data to skip
+    const snippets = await prisma.snippet.findMany({
+      skip: skip,
+      take: limit,
+      include: {
+        user: {
+          select: {
+            username: true,
+            image: true,
+            email: true,
+          },
+        },
+      },
+      // have to add include forks,stars
+    });
+
+    return ApiResponse.success(200, snippets, "Snippet fetched successfully.");
+  } catch (error) {
+    console.error("Error get snippet", error);
+    return ApiResponse.error("Someting went wrong while getting all snippets.");
   }
 }
