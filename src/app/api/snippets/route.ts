@@ -55,8 +55,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
     //pagination
     const queries = req.nextUrl.searchParams;
-    const limit = Number(queries.get("limit")) || 1;
-    const page = Number(queries.get("page")) || 10;
+    const limit = Number(queries.get("limit")) || 10;
+    const page = Number(queries.get("page")) || 1;
     const skip = (page - 1) * limit; // how many data to skip
     const snippets = await prisma.snippet.findMany({
       skip: skip,
@@ -70,9 +70,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       // have to add include forks,stars
     });
-
+    if (!snippets.length) return ApiResponse.notFound("Snippets not found!");
     return ApiResponse.success(200, snippets, "Snippet fetched successfully.");
   } catch (error) {
     console.error("Error get snippet", error);
