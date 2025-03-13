@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/providers/theme-provider";
 import AuthProvider from "@/providers/Authprovider";
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 
 export default function RootLayout({
   children,
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <AuthProvider>
         <body className={`${inter.variable} antialiased`}>
-          <ThemeProvider> {children}</ThemeProvider>
+          <ThemeProvider>
+            <ReactQueryProvider>{children}</ReactQueryProvider>{" "}
+          </ThemeProvider>
         </body>
       </AuthProvider>
     </html>

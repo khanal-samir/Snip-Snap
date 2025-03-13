@@ -15,3 +15,15 @@ export const formatError = (err: ZodError) => {
 
   return totalErrors;
 };
+export const languages = [
+  "typescript",
+  "javascript",
+  "html",
+  "css",
+  "python",
+  "java",
+  "csharp",
+  "cpp",
+  "php",
+  "ruby",
+];

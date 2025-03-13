@@ -20,7 +20,7 @@ const CodeEditor = ({
 }: CodeEditorProps) => {
   const editorRef = useRef(null);
 
-  const handleEditorDidMount = (editor) => {
+  const handleEditorDidMount = (editor: any) => {
     editorRef.current = editor;
     editor.focus(); //focus on mount
   };
