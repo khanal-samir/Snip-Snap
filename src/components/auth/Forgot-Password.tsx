@@ -39,7 +39,11 @@ export default function ForgotPassword({
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
             <Image src="/logo.svg" height={100} width={100} alt="logo" />
-            <h1 className="text-xl font-bold">Snip Snap</h1>
+            <h1 className="text-xl font-bold">
+              {" "}
+              <span className="text-primary">Snip</span>
+              <span>Snap</span>
+            </h1>
             <p className=" text-center text-balance text-muted-foreground">
               Forgot your password? <br />
               Enter your <strong>email</strong> to get{" "}

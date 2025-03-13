@@ -16,7 +16,11 @@ export default function Header() {
           alt="logo"
           className="w-fit"
         />
-        <h1 className="font-bold">Snip Snap</h1>
+        <h1 className="font-bold">
+          {" "}
+          <span className="text-primary">Snip</span>
+          <span>Snap</span>
+        </h1>
       </div>
 
       <section className="flex justify-center items-center gap-4">

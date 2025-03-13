@@ -8,7 +8,8 @@ export default function Hero() {
     <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 place-items-center">
       <section className="flex flex-col flex-wrap gap-4">
         <h1 className="font-bold text-3xl md:text-5xl lg:text-7xl">
-          Snip Snap
+          <span className="text-primary">Snip</span>
+          <span>Snap</span>
         </h1>
         <p className="text-muted-foreground text-base sm:text-xl lg:text-2xl font-light">
           Collaborative snippet sharing app

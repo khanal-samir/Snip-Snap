@@ -17,7 +17,10 @@ export default function page() {
               priority
               className="w-fit h-fit"
             />
-            Snip Snap
+            <span>
+              <span className="text-primary">Snip</span>
+              <span>Snap</span>
+            </span>
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center">

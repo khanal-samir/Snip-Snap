@@ -47,7 +47,10 @@ export default function RegisterForm({
         action={formAction}
       >
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Register to Snip Snap</h1>
+          <h1 className="text-2xl font-bold">
+            Register to <span className="text-primary">Snip</span>
+            <span>Snap</span>
+          </h1>
           <p className="text-balance text-sm text-muted-foreground">
             Enter your details below to register your account.
           </p>

@@ -1,32 +1,42 @@
-import { useRef } from "react";
-import Editor from "@monaco-editor/react";
+"use client";
 
-interface CodeEditorProps {
-  language?: string;
-  theme?: string;
-  value?: string;
-  onChange?: (value: string | undefined) => void;
-  readOnly?: boolean;
-  height?: string;
-}
+import { useRef, useEffect } from "react";
+import Editor, { type OnMount } from "@monaco-editor/react";
+import { defineGithubDarkTheme } from "@/lib/utils";
+import type { CodeEditorProps } from "@/index";
 
 const CodeEditor = ({
   language = "javascript",
-  theme = "vs-dark",
+  theme = "github-dark", // Default to GitHub Dark theme
   value = "",
   onChange,
   readOnly = false,
   height = "500px",
 }: CodeEditorProps) => {
-  const editorRef = useRef(null);
+  const editorRef = useRef<any>(null);
 
-  const handleEditorDidMount = (editor: any) => {
+  const handleEditorDidMount: OnMount = (editor, monaco) => {
+    // Define GitHub Dark theme when editor mounts
+    defineGithubDarkTheme(monaco);
+    monaco.editor.setTheme("github-dark");
+
     editorRef.current = editor;
-    editor.focus(); //focus on mount
+
+    // Only focus if not in read-only mode
+    if (!readOnly) {
+      editor.focus();
+    }
   };
 
+  // Update editor options when readOnly changes
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({ readOnly });
+    }
+  }, [readOnly]);
+
   return (
-    <div className="monaco-editor-container">
+    <div className="monaco-editor-container rounded-md overflow-hidden border border-zinc-800">
       <Editor
         height={height}
         language={language}
@@ -43,7 +53,14 @@ const CodeEditor = ({
           automaticLayout: true,
           lineNumbers: "on",
           folding: true,
-          renderLineHighlight: "all",
+          renderLineHighlight: "line",
+          scrollbar: {
+            verticalScrollbarSize: 8,
+            horizontalScrollbarSize: 8,
+          },
+          padding: { top: 8, bottom: 8 },
+          fontFamily: "'SF Mono', Menlo, Monaco, 'Courier New', monospace",
+          fontLigatures: true,
         }}
       />
     </div>

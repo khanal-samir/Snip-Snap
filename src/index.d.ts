@@ -27,3 +27,11 @@ export type CustomUser = {
   email?: string | null; // for session type safety
   isVerified?: boolean;
 };
+export interface CodeEditorProps {
+  language?: string;
+  theme?: string;
+  value?: string;
+  onChange?: (value: string | undefined) => void;
+  readOnly?: boolean;
+  height?: string;
+}

@@ -48,7 +48,11 @@ export function AppSidebar() {
               />
             </div>
             {!isCollapsed && (
-              <span className="ml-2 text-lg font-bold">SnipSnap</span>
+              <span className="ml-2 text-lg font-bold">
+                {" "}
+                <span className="text-primary">Snip</span>
+                <span>Snap</span>
+              </span>
             )}
           </div>
           <Button

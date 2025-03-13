@@ -13,7 +13,10 @@ const Footer = () => {
           height={100}
           loading="lazy" //default
         />
-        <span>Snip Snap</span>
+        <span>
+          <span className="text-primary">Snip</span>
+          <span>Snap</span>
+        </span>
       </div>
       {new Date().getFullYear()} © Samir Khanal
     </footer>
