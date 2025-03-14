@@ -25,8 +25,22 @@ export type CustomSession = {
 export type CustomUser = {
   id?: string | null;
   email?: string | null; // for session type safety
-  isVerified?: boolean;
+  image?: string | null;
+  username?: string;
 };
+
+interface ISnippet {
+  id: string;
+  title: string;
+  content: string;
+  language: string;
+  description?: string | null;
+  isPublic: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  user: CustomUser;
+}
 export interface CodeEditorProps {
   language?: string;
   theme?: string;

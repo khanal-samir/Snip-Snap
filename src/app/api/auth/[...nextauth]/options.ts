@@ -24,8 +24,9 @@ export const authOptions: AuthOptions = {
           },
           select: {
             id: true,
-            isVerified: true,
             email: true,
+            image: true,
+            username: true,
           },
         });
         if (user) {

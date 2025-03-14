@@ -79,7 +79,7 @@ export function AppSidebar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <SidebarMenuButton asChild tooltip="Dashboard">
-                    <Link href="#">
+                    <Link href="/dashboard">
                       <Home className="h-5 w-5" />
                       <span>Dashboard</span>
                     </Link>
@@ -97,7 +97,7 @@ export function AppSidebar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <SidebarMenuButton asChild tooltip="My Snippets">
-                    <Link href="#">
+                    <Link href="/my-snippets">
                       <FileCode className="h-5 w-5" />
                       <span>My Snippets</span>
                     </Link>
