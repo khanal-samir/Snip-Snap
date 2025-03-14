@@ -8,6 +8,7 @@ import {
   Settings,
   Star,
   User,
+  Compass,
 } from "lucide-react";
 import {
   Sidebar,
@@ -126,6 +127,24 @@ export function AppSidebar() {
                   className="group-data-[state=expanded]:hidden"
                 >
                   Starred
+                </TooltipContent>
+              </Tooltip>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SidebarMenuButton asChild tooltip="Explore">
+                    <Link href="#">
+                      <Compass className="h-5 w-5" />
+                      <span>Explore</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="group-data-[state=expanded]:hidden"
+                >
+                  Settings
                 </TooltipContent>
               </Tooltip>
             </SidebarMenuItem>

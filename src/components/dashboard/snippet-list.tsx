@@ -62,6 +62,7 @@ export function SnippetList() {
           </Button>
         </div>
       </header>
+
       {isLoading || isError ? (
         <SnippetsLoading />
       ) : (

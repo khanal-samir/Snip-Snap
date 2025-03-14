@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { snippetSchema } from "@/schema/snippetSchema";
-import CodeEditor from "./CodeEditor";
+import CodeEditor from "../../helpers/CodeEditor";
 import { languages } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";

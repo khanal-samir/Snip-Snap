@@ -2,8 +2,9 @@ import type { ReactNode } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/common/app-sidebar";
 import { TopNav } from "@/components/common/top-nav";
-
-export function DashboardLayout({ children }: { children: ReactNode }) {
+import { headers } from "next/headers";
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  headers();
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-screen w-full">
