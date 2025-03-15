@@ -49,3 +49,13 @@ export interface CodeEditorProps {
   readOnly?: boolean;
   height?: string;
 }
+// Define types for the snippet data
+import { snippetSchema } from "./schema/snippetSchema";
+export type SnippetFormValues = z.infer<typeof snippetSchema>;
+interface CodeSnippetEditorProps {
+  defaultValues?: SnippetFormValues;
+  onSubmit: (data: SnippetFormValues) => void;
+  submitButtonText?: string;
+  loadingText?: string;
+  isLoading?: boolean;
+}
