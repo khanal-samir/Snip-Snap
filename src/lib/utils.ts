@@ -62,3 +62,9 @@ export const defineGithubDarkTheme = (monaco: any) => {
     },
   });
 };
+// get snippet from id
+import axios from "axios";
+export const getSnippet = async (id: string) => {
+  const { data } = await axios.get(`/api/snippets/${id}`);
+  return data.data;
+};

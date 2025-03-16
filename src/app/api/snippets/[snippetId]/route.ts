@@ -93,13 +93,13 @@ export async function GET(
 ): Promise<NextResponse> {
   try {
     //authentication
+    const { snippetId } = await params;
     const result = await getUserId();
     if (result instanceof Response) return result;
 
     const snippet = await prisma.snippet.findUnique({
       where: {
-        id: params.snippetId,
-        userId: result,
+        id: snippetId,
       },
       include: {
         user: {

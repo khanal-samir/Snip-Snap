@@ -16,8 +16,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import type { ISnippet } from "@/index";
+import { useQueryClient } from "@tanstack/react-query";
+import { getSnippet } from "@/lib/utils";
 
 export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
+  const queryClient = useQueryClient();
+  // prefetch data on hover
+  const onHoverPostOneLink = (id: string) =>
+    queryClient.prefetchQuery({
+      //prefetches the data
+      queryKey: ["snippets", id],
+      queryFn: () => getSnippet(id),
+    });
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {snippets.map((snippet) => (
@@ -67,8 +78,13 @@ export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <Link href={`#`}>
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                onMouseEnter={() => onHoverPostOneLink(snippet.id)}
+              >
+                <Link href={`snippet/${snippet.id}`}>
                   <Eye className="mr-1 h-3 w-3" />
                   View
                 </Link>
