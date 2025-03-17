@@ -37,10 +37,13 @@ export function TopNav() {
 
       <div className="flex items-center gap-2 md:ml-auto md:gap-4">
         <ThemeToggle />
-        <Button size="sm" className="hidden md:flex">
-          <Plus className="mr-2 h-4 w-4" />
-          New Snippet
-        </Button>
+        <Link href="/create-snippet">
+          {" "}
+          <Button size="sm" className="hidden md:flex">
+            <Plus className="mr-2 h-4 w-4" />
+            New Snippet
+          </Button>
+        </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">

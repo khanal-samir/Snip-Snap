@@ -65,6 +65,20 @@ export const defineGithubDarkTheme = (monaco: any) => {
 // get snippet from id
 import axios from "axios";
 export const getSnippet = async (id: string) => {
-  const { data } = await axios.get(`/api/snippets/${id}`);
-  return data.data;
+  try {
+    const { data } = await axios.get(`/api/snippets/${id}`);
+    return data.data;
+  } catch (error) {
+    // With axios, the error object contains response details
+    if (axios.isAxiosError(error) && error.response) {
+      // This maintains the structure your component expects
+      throw {
+        message: error.response.data.message || "Failed to fetch snippet",
+        status: error.response.status,
+        response: { data: error.response.data },
+      };
+    }
+    // For network errors or other issues
+    throw new Error("Failed to fetch snippet");
+  }
 };

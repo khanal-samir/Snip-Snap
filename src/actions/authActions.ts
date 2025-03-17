@@ -67,6 +67,7 @@ export async function handleRegister(
     } else {
       const avatar = createAvatar(botttsNeutral, {
         seed: payload.username,
+        backgroundColor: ["00acc1", "d81b60", "ffb300"],
       });
       const avtImage = avatar.toDataUri();
       await prisma.user.create({

@@ -28,9 +28,6 @@ export function SnippetList() {
       const { data } = await axios.get("/api/snippets");
       return data.data;
     },
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes
   });
   // // Sort snippets based on the selected order
   // const sortedSnippets = [...snippets].sort((a, b) => {
