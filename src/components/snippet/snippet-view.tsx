@@ -40,7 +40,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
     queryKey: ["snippets", snippetId],
     queryFn: () => getSnippet(snippetId),
   });
-  const isOwner = session?.user?.id === snippet?.user.id;
+  const isOwner = session?.user?.id === snippet?.userId;
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto py-8">

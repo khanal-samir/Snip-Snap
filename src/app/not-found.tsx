@@ -24,8 +24,9 @@ export default function NotFound() {
 
       <Image
         src="/404.svg"
-        width={500}
-        height={500}
+        width={200}
+        height={200}
+        priority
         alt="not-found svg"
         className="hidden sm:block w-full h-full"
       />

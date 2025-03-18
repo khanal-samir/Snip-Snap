@@ -23,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 interface SnippetActionsProps {
   snippetId: string;
@@ -48,10 +49,14 @@ export default function SnippetActions({ snippetId }: SnippetActionsProps) {
 
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuLabel>Snippet Actions</DropdownMenuLabel>
-          <DropdownMenuItem className="cursor-pointer">
-            <Pencil className="mr-2 h-4 w-4" />
-            <span>Edit</span>
-          </DropdownMenuItem>
+          <Link href={`/update-snippet/${snippetId}`}>
+            {" "}
+            <DropdownMenuItem className="cursor-pointer">
+              {" "}
+              <Pencil className="mr-2 h-4 w-4" />
+              <span>Edit</span>
+            </DropdownMenuItem>{" "}
+          </Link>
           <DropdownMenuItem className="cursor-pointer">
             <Copy className="mr-2 h-4 w-4" />
             <span>Copy to clipboard</span>
