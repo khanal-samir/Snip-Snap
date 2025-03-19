@@ -6,7 +6,6 @@ import {
   Clock,
   MessageSquare,
   Share2,
-  Sparkles,
   Copy,
   GitFork,
   Star,
@@ -28,6 +27,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSnippet } from "@/lib/utils";
 import type { CustomSession, ISnippet } from "@/index";
 import { useSession } from "next-auth/react";
+import AiExplanationDialog from "../common/ai-explaination";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
   const { data: session }: { data: CustomSession | null } = useSession();
@@ -120,7 +120,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               </Button>
 
               <Button variant="outline" size="sm" className="gap-2">
-                <GitFork className="h-4 w-4" />
+                <GitFork className="h-any4 w-4" />
                 <span>{3}</span>
               </Button>
 
@@ -229,14 +229,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
                 Share
               </Button>
 
-              <Button
-                variant="default"
-                size="sm"
-                className="text-xs gap-1.5 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
-              >
-                <Sparkles className="h-4 w-4" />
-                Ask AI
-              </Button>
+              <AiExplanationDialog snippetContent={snippet.content} />
             </div>
           </div>
         </CardContent>
