@@ -1,13 +1,5 @@
 "use client";
-
-import {
-  MoreVertical,
-  Pencil,
-  Trash2,
-  Download,
-  Copy,
-  Share2,
-} from "lucide-react";
+import { MoreVertical, Pencil, Trash2, Copy, Share2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,12 +16,33 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface SnippetActionsProps {
   snippetId: string;
 }
 
 export default function SnippetActions({ snippetId }: SnippetActionsProps) {
+  const queryClient = useQueryClient();
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await axios.delete(`/api/snippets/${id}`);
+      return data.message;
+    },
+    onSuccess: (msg: string) => {
+      toast.success(msg);
+      queryClient.invalidateQueries({ queryKey: ["snippets"] });
+    },
+    onError: (err: unknown) => {
+      if (axios.isAxiosError(err) && err.response) {
+        toast.error(`Error: ${err.response.data.message}`);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    },
+  });
   return (
     <TooltipProvider>
       <DropdownMenu>
@@ -62,15 +75,14 @@ export default function SnippetActions({ snippetId }: SnippetActionsProps) {
             <span>Copy to clipboard</span>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
-            <Download className="mr-2 h-4 w-4" />
-            <span>Download</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
             <Share2 className="mr-2 h-4 w-4" />
             <span>Share</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
+          <DropdownMenuItem
+            className="cursor-pointer text-destructive focus:text-destructive"
+            onClick={() => deleteMutation.mutate(snippetId)}
+          >
             <Trash2 className="mr-2 h-4 w-4" />
             <span>Delete</span>
           </DropdownMenuItem>

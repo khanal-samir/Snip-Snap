@@ -20,7 +20,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (!token && url.pathname.startsWith("/dashboard")) {
+  if (
+    !token &&
+    (url.pathname.startsWith("/dashboard") ||
+      url.pathname.startsWith("/create-snippet") ||
+      url.pathname.startsWith("/update-snippet") ||
+      url.pathname.startsWith("/snippet"))
+  ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -31,6 +37,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
+    "/create-snippet",
+    "/snippet/:path*",
+    "/update-snippet/:path*",
     "/dashboard/:path*",
     "/register",
     "/login",

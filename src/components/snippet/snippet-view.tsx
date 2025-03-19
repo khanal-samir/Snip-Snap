@@ -7,7 +7,6 @@ import {
   // GitFork,
   Clock,
   MessageSquare,
-  Download,
   Share2,
   Sparkles,
   Copy,
@@ -44,7 +43,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto py-8">
-        <div className="flex items-center justify-between bg-background border rounded-lg p-4 shadow-sm">
+        <div className="flex items-center justify-between bg-background border rounded-lg shadow-sm">
           <DashboardLink />
         </div>
 
@@ -72,7 +71,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
   if (error) toast.error(error.message);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-2 md:px-0">
       {" "}
       <div className="flex items-center justify-between bg-background border rounded-lg p-4 shadow-sm">
         <DashboardLink />
@@ -222,11 +221,6 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
         </TooltipProvider>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="text-xs gap-1.5">
-            <Download className="h-4 w-4" />
-            Download
-          </Button>
-
           <Button variant="outline" size="sm" className="text-xs gap-1.5">
             <Share2 className="h-4 w-4" />
             Share

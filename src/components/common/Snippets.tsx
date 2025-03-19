@@ -1,6 +1,7 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { Calendar, Code, Eye, MoreHorizontal } from "lucide-react";
+import { Calendar, Code, Eye } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -8,16 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import type { ISnippet } from "@/index";
+import type { CustomSession, ISnippet } from "@/index";
 import { useQueryClient } from "@tanstack/react-query";
 import { getSnippet } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import SnippetActions from "../snippet/snippet-actions";
 
 export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
   const queryClient = useQueryClient();
@@ -28,6 +25,7 @@ export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
       queryKey: ["snippets", id],
       queryFn: () => getSnippet(id),
     });
+  const { data: session }: { data: CustomSession | null } = useSession();
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -43,19 +41,9 @@ export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
                 {snippet.language}
               </div>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontal className="h-4 w-4" />
-                  <span className="sr-only">Menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Share</DropdownMenuItem>
-                <DropdownMenuItem>Delete</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {session?.user?.id === snippet.userId && (
+              <SnippetActions snippetId={snippet.id} />
+            )}
           </CardHeader>
           <CardContent className="flex-grow">
             <p className="text-sm text-muted-foreground line-clamp-3">

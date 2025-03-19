@@ -1,7 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -29,15 +27,6 @@ export function SnippetList() {
       return data.data;
     },
   });
-  // // Sort snippets based on the selected order
-  // const sortedSnippets = [...snippets].sort((a, b) => {
-  //   if (sortOrder === "newest") {
-  //     return new Date(b.created).getTime() - new Date(a.created).getTime();
-  //   } else {
-  //     return new Date(a.created).getTime() - new Date(b.created).getTime();
-  //   }
-  // })
-
   if (error) toast.error(error.message);
   return (
     <div className="space-y-6">
@@ -53,10 +42,6 @@ export function SnippetList() {
               <SelectItem value="oldest">Oldest First</SelectItem>
             </SelectContent>
           </Select>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            New Snippet
-          </Button>
         </div>
       </header>
 

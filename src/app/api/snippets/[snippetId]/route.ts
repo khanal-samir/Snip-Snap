@@ -78,7 +78,7 @@ export async function DELETE(
         id: params.snippetId,
       },
     });
-    return ApiResponse.success(200, null, "User snippet fetched successfully.");
+    return ApiResponse.success(200, null, "User snippet deleted successfully.");
   } catch (error) {
     console.error("Error delete snippet", error);
     return ApiResponse.error(
