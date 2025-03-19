@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function GetStarted() {
   return (
@@ -13,10 +14,13 @@ export default function GetStarted() {
           Start organizing and sharing your code snippets today. No payment
           required.
         </p>
-        <Button size="lg" className="font-semibold">
-          Start Creating Snippets
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+        <Link href="/login">
+          {" "}
+          <Button size="lg" className="font-semibold">
+            Start Creating Snippets
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </Link>
         <p className="text-sm text-gray-500 mt-4">
           ✨ Start sharing your code in seconds
         </p>

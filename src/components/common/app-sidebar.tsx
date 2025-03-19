@@ -5,10 +5,10 @@ import {
   ChevronRight,
   FileCode,
   Home,
-  Settings,
   Star,
   User,
   Compass,
+  CircleArrowOutUpRight,
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,6 +28,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 export function AppSidebar() {
   const { state, toggleSidebar } = useSidebar();
@@ -144,7 +145,7 @@ export function AppSidebar() {
                   side="right"
                   className="group-data-[state=expanded]:hidden"
                 >
-                  Settings
+                  Explore
                 </TooltipContent>
               </Tooltip>
             </SidebarMenuItem>
@@ -169,18 +170,22 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <SidebarMenuButton asChild tooltip="Settings">
-                    <Link href="#">
-                      <Settings className="h-5 w-5" />
-                      <span>Settings</span>
-                    </Link>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip="Sign out"
+                    onClick={() => signOut()}
+                  >
+                    <div>
+                      <CircleArrowOutUpRight className="h-5 w-5" />
+                      <span>Sign out</span>
+                    </div>
                   </SidebarMenuButton>
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
                   className="group-data-[state=expanded]:hidden"
                 >
-                  Settings
+                  Sign out
                 </TooltipContent>
               </Tooltip>
             </SidebarMenuItem>

@@ -4,17 +4,20 @@ import axios from "axios";
 import { toast } from "sonner";
 import CodeSnippetEditor from "@/components/snippet/CodeSnippetEditor";
 import DashboardLink from "../common/DashboardLink";
-import { SnippetFormValues } from "@/index";
+import { ISnippet, SnippetFormValues } from "@/index";
+import { useRouter } from "next/navigation";
 
 export default function CreateSnippet() {
   // create snippet api call
+  const router = useRouter();
   const mutation = useMutation({
     mutationFn: async (newSnippet: SnippetFormValues) => {
       const { data } = await axios.post("/api/snippets", newSnippet);
-      return data;
+      return data.data;
     },
-    onSuccess: () => {
+    onSuccess: (data: ISnippet) => {
       toast.success("Snippet created successfully");
+      router.push(`/snippet/${data.id}`);
     },
     onError: (err: unknown) => {
       if (axios.isAxiosError(err) && err.response) {

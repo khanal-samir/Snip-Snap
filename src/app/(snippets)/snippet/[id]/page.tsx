@@ -7,7 +7,7 @@ export default async function SnippetPage({
 }) {
   const { id } = await params;
   return (
-    <div className="container mx-auto py-8 max-w-4xl">
+    <div className="container mx-auto max-w-4xl">
       <SnippetView snippetId={id} />
     </div>
   );

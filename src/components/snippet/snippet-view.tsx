@@ -3,15 +3,15 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import {
   FileCode,
-  // Star,
-  // GitFork,
   Clock,
   MessageSquare,
   Share2,
   Sparkles,
   Copy,
+  GitFork,
+  Star,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import CodeEditor from "@/helpers/CodeEditor";
 import SnippetActions from "@/components/snippet/snippet-actions";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ import { toast } from "sonner";
 import DashboardLink from "../common/DashboardLink";
 import { useQuery } from "@tanstack/react-query";
 import { getSnippet } from "@/lib/utils";
-import { CustomSession, ISnippet } from "@/index";
+import type { CustomSession, ISnippet } from "@/index";
 import { useSession } from "next-auth/react";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
@@ -40,25 +40,33 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
     queryFn: () => getSnippet(snippetId),
   });
   const isOwner = session?.user?.id === snippet?.userId;
+
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto py-8">
-        <div className="flex items-center justify-between bg-background border rounded-lg shadow-sm">
+      <div className="max-w-5xl mx-auto px-4 md:px-6">
+        <div className="flex items-center justify-between mb-6">
           <DashboardLink />
         </div>
 
-        <div className="mt-8 text-center">
-          <h2 className="text-xl font-medium mb-2">Loading snippet...</h2>
-          <p className="text-muted-foreground">
-            Please wait while we fetch the snippet data.
-          </p>
-        </div>
+        <Card className="border shadow-md">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <div className="animate-pulse flex flex-col items-center gap-4">
+              <div className="h-8 w-64 bg-muted rounded-md"></div>
+              <div className="h-4 w-48 bg-muted/60 rounded-md"></div>
+              <div className="text-muted-foreground mt-2">
+                Loading snippet...
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
+
   if (!snippet) {
     notFound(); // This will trigger Next.js to show the not-found page
   }
+
   const copySnippetId = () => {
     if (snippet) {
       navigator.clipboard.writeText(snippet.id);
@@ -71,9 +79,8 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
   if (error) toast.error(error.message);
 
   return (
-    <div className="space-y-6 px-2 md:px-0">
-      {" "}
-      <div className="flex items-center justify-between bg-background border rounded-lg p-4 shadow-sm">
+    <div className="max-w-5xl mx-auto py-6 px-4 md:px-6 space-y-6">
+      <div className="flex items-center justify-between mb-2">
         <DashboardLink />
 
         <div className="flex items-center gap-3">
@@ -88,39 +95,41 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
           </Badge>
         </div>
       </div>
+
       <Card className="border shadow-md overflow-hidden">
-        <div className="bg-gradient-to-r from-muted/50 to-background border-b px-6 py-4">
-          <div className="flex items-center justify-between mb-3">
+        <CardHeader className="bg-muted/30 border-b px-6 py-4 space-y-3">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1">
-              <div className="bg-primary/10 p-1.5 rounded-md">
+              <div className="bg-primary/10 p-2 rounded-md">
                 <FileCode className="h-5 w-5 text-primary" />
               </div>
               <h2 className="text-xl font-medium">{snippet.title}</h2>
             </div>
 
             <div className="flex items-center gap-3">
-              {/* <Button
-                    variant="outline"
-                    size="sm"
-                    className={`gap-2 ${ 52 ? "bg-primary/10 border-primary/20" : ""}`}
-                  >
-                    <Star
-                      className={`h-4 w-4 ${snippet.starred ? "fill-primary text-primary" : ""}`}
-                    />
-                    <span>{snippet.stars}</span>
-                  </Button> */}
+              {/* //check if user has starred the snippet */}
+              <Button
+                variant="outline"
+                size="sm"
+                className={`gap-2 ${snippet.id ? "bg-primary/10 border-primary/20" : ""}`}
+              >
+                <Star
+                  className={`h-4 w-4 ${snippet.id ? "fill-primary text-primary" : ""}`}
+                />
+                <span>{5}</span>
+              </Button>
 
-              {/* <Button variant="outline" size="sm" className="gap-2">
-                    <GitFork className="h-4 w-4" />
-                    <span>{snippet.forks}</span>
-                  </Button> */}
+              <Button variant="outline" size="sm" className="gap-2">
+                <GitFork className="h-4 w-4" />
+                <span>{3}</span>
+              </Button>
 
               {isOwner && <SnippetActions snippetId={snippet.id} />}
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-1">
-            <div className="flex items-center gap-2 bg-muted/30 px-2 py-1 rounded-full">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full">
               {snippet.user?.image ? (
                 <Image
                   src={snippet.user.image || "/placeholder.svg"}
@@ -139,9 +148,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               </span>
             </div>
 
-            <span className="text-muted-foreground/60">•</span>
-
-            <div className="flex items-center gap-1 text-muted-foreground bg-muted/30 px-2 py-1 rounded-full">
+            <div className="flex items-center gap-1.5 text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full">
               <Clock className="h-3.5 w-3.5" />
               <span>
                 Created {new Date(snippet.createdAt).toLocaleString()}
@@ -149,18 +156,15 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
             </div>
 
             {snippet.updatedAt && snippet.updatedAt !== snippet.createdAt && (
-              <>
-                <span className="text-muted-foreground/60">•</span>
-                <div className="flex items-center gap-1 text-muted-foreground bg-muted/30 px-2 py-1 rounded-full">
-                  <Clock className="h-3.5 w-3.5" />
-                  <span>
-                    Updated {new Date(snippet.updatedAt).toLocaleString()}
-                  </span>
-                </div>
-              </>
+              <div className="flex items-center gap-1.5 text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full">
+                <Clock className="h-3.5 w-3.5" />
+                <span>
+                  Updated {new Date(snippet.updatedAt).toLocaleString()}
+                </span>
+              </div>
             )}
           </div>
-        </div>
+        </CardHeader>
 
         <CardContent className="p-0">
           <div className="border-b">
@@ -185,9 +189,9 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
           </div>
 
           {snippet.description && (
-            <div className="p-6 bg-gradient-to-b from-muted/5 to-transparent">
+            <div className="p-6">
               <div className="rounded-lg overflow-hidden border shadow-sm">
-                <div className="bg-gradient-to-r from-primary/5 to-muted/30 px-4 py-3 border-b flex items-center gap-2">
+                <div className="bg-muted/50 px-4 py-3 border-b flex items-center gap-2">
                   <MessageSquare className="h-4 w-4 text-primary" />
                   <span className="font-medium">Description</span>
                 </div>
@@ -199,43 +203,44 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               </div>
             </div>
           )}
+
+          <div className="flex items-center justify-between border-t py-4 px-6">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-md border border-border/50 w-fit cursor-pointer hover:bg-muted/70 transition-colors"
+                    onClick={copySnippetId}
+                  >
+                    <span className="text-xs text-muted-foreground">ID:</span>
+                    <code className="text-xs font-mono">{snippet.id}</code>
+                    <Copy className="h-3.5 w-3.5 text-muted-foreground ml-1" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p className="text-xs">Click to copy snippet ID</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" className="text-xs gap-1.5">
+                <Share2 className="h-4 w-4" />
+                Share
+              </Button>
+
+              <Button
+                variant="default"
+                size="sm"
+                className="text-xs gap-1.5 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+              >
+                <Sparkles className="h-4 w-4" />
+                Ask AI
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
-      <div className="flex items-center justify-between text-sm border-t border-b py-4 px-4">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div
-                className="flex items-center gap-2 bg-muted/30 px-3 py-2 rounded-md border border-border/50 w-fit cursor-pointer hover:bg-muted/50 transition-colors"
-                onClick={copySnippetId}
-              >
-                <span className="text-xs text-muted-foreground">ID:</span>
-                <code className="text-xs font-mono">{snippet.id}</code>
-                <Copy className="h-3.5 w-3.5 text-muted-foreground ml-1" />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              <p className="text-xs">Click to copy snippet ID</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="text-xs gap-1.5">
-            <Share2 className="h-4 w-4" />
-            Share
-          </Button>
-
-          <Button
-            variant="default"
-            size="sm"
-            className="text-xs gap-1.5 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
-          >
-            <Sparkles className="h-4 w-4" />
-            Ask AI
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
