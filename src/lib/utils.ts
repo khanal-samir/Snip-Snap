@@ -82,3 +82,9 @@ export const getSnippet = async (id: string) => {
     throw new Error("Failed to fetch snippet");
   }
 };
+
+import { toast } from "sonner";
+export const copySnippetId = (id: string) => {
+  navigator.clipboard.writeText(id);
+  toast.success("Snippet ID copied to clipboard");
+};

@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
+import { copySnippetId } from "@/lib/utils";
 
 interface SnippetActionsProps {
   snippetId: string;
@@ -70,7 +71,10 @@ export default function SnippetActions({ snippetId }: SnippetActionsProps) {
               <span>Edit</span>
             </DropdownMenuItem>{" "}
           </Link>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => copySnippetId(snippetId)}
+          >
             <Copy className="mr-2 h-4 w-4" />
             <span>Copy to clipboard</span>
           </DropdownMenuItem>

@@ -28,6 +28,7 @@ import { getSnippet } from "@/lib/utils";
 import type { CustomSession, ISnippet } from "@/index";
 import { useSession } from "next-auth/react";
 import AiExplanationDialog from "../common/ai-explaination";
+import { copySnippetId } from "@/lib/utils";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
   const { data: session }: { data: CustomSession | null } = useSession();
@@ -67,16 +68,10 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
     notFound(); // This will trigger Next.js to show the not-found page
   }
 
-  const copySnippetId = () => {
-    if (snippet) {
-      navigator.clipboard.writeText(snippet.id);
-      toast.success("Snippet ID copied to clipboard");
-    } else {
-      toast.error("Snippet data is not available");
-    }
-  };
-
-  if (error) toast.error(error.message);
+  if (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
 
   return (
     <div className="max-w-5xl mx-auto py-6 px-4 md:px-6 space-y-6">
@@ -210,7 +205,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
                 <TooltipTrigger asChild>
                   <div
                     className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-md border border-border/50 w-fit cursor-pointer hover:bg-muted/70 transition-colors"
-                    onClick={copySnippetId}
+                    onClick={() => copySnippetId(snippet.id)}
                   >
                     <span className="text-xs text-muted-foreground">ID:</span>
                     <code className="text-xs font-mono">{snippet.id}</code>

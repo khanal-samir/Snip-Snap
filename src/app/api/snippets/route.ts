@@ -76,7 +76,21 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       // have to add include forks,stars
     });
     if (!snippets.length) return ApiResponse.notFound("Snippets not found!");
-    return ApiResponse.success(200, snippets, "Snippet fetched successfully.");
+
+    //for inifinte scrolling data
+    const totalsnippets = await prisma.snippet.count();
+    const totalPages = Math.ceil(totalsnippets / limit);
+    const hasNextPage = page < totalPages;
+    return ApiResponse.success(
+      200,
+      {
+        snippets,
+        metadata: {
+          nextPage: hasNextPage ? page + 1 : null,
+        },
+      },
+      "Snippet fetched successfully."
+    );
   } catch (error) {
     console.error("Error get snippet", error);
     return ApiResponse.error("Someting went wrong while getting all snippets.");
