@@ -32,12 +32,12 @@ export type CustomUser = {
 interface ISnippet {
   id: string;
   title: string;
-  content: string;
+  content?: string;
   language: string;
   description?: string | null;
   isPublic: boolean;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
   userId: string;
   user: CustomUser;
 }
@@ -58,4 +58,23 @@ interface CodeSnippetEditorProps {
   submitButtonText?: string;
   loadingText?: string;
   isLoading?: boolean;
+}
+
+//user profile
+export interface UserProfile {
+  id: string;
+  email: string;
+  username: string;
+  image: string;
+  Snippet: Pick<
+    ISnippet,
+    | "id"
+    | "title"
+    | "description"
+    | "createdAt"
+    | "language"
+    | "isPublic"
+    | "userId"
+    | "user"
+  >[];
 }

@@ -72,7 +72,7 @@ export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
                 asChild
                 onMouseEnter={() => onHoverPostOneLink(snippet.id)}
               >
-                <Link href={`snippet/${snippet.id}`}>
+                <Link href={`/snippet/${snippet.id}`}>
                   <Eye className="mr-1 h-3 w-3" />
                   View
                 </Link>

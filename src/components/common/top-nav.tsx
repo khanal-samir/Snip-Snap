@@ -14,9 +14,11 @@ import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "../ui/theme";
 import AvatarHolder from "./Avatar";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { CustomSession } from "@/index";
 
 export function TopNav() {
+  const { data: session }: { data: CustomSession | null } = useSession();
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
       <SidebarTrigger className="md:hidden">
@@ -55,13 +57,13 @@ export function TopNav() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="#">Profile</Link>
+              <Link href={`/user/${session?.user?.id}`}>Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="#">Settings</Link>
+              <Link href="#">Starred</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="#">My Snippets</Link>
+              <Link href="#">Explore</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={async () => await signOut()}>

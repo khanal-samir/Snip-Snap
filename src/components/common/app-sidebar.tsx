@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
-  FileCode,
   Home,
   Star,
   User,
@@ -28,12 +27,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Image from "next/image";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { CustomSession } from "@/index";
 
 export function AppSidebar() {
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
-
+  const { data: session }: { data: CustomSession | null } = useSession();
   return (
     <Sidebar collapsible="icon" className="h-screen">
       <SidebarHeader>
@@ -98,24 +98,6 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <SidebarMenuButton asChild tooltip="My Snippets">
-                    <Link href="/my-snippets">
-                      <FileCode className="h-5 w-5" />
-                      <span>My Snippets</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="right"
-                  className="group-data-[state=expanded]:hidden"
-                >
-                  My Snippets
-                </TooltipContent>
-              </Tooltip>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <Tooltip>
-                <TooltipTrigger asChild>
                   <SidebarMenuButton asChild tooltip="Starred">
                     <Link href="#">
                       <Star className="h-5 w-5" />
@@ -153,7 +135,7 @@ export function AppSidebar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <SidebarMenuButton asChild tooltip="Profile">
-                    <Link href="#">
+                    <Link href={`/user/${session?.user?.id}`}>
                       <User className="h-5 w-5" />
                       <span>Profile</span>
                     </Link>

@@ -5,7 +5,6 @@ import {
   FileCode,
   Clock,
   MessageSquare,
-  Share2,
   Copy,
   GitFork,
   Star,
@@ -29,6 +28,7 @@ import type { CustomSession, ISnippet } from "@/index";
 import { useSession } from "next-auth/react";
 import AiExplanationDialog from "../common/ai-explaination";
 import { copySnippetId } from "@/lib/utils";
+import Link from "next/link";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
   const { data: session }: { data: CustomSession | null } = useSession();
@@ -124,7 +124,10 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full">
+            <Link
+              href={`/user/${snippet.userId}`}
+              className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full"
+            >
               {snippet.user?.image ? (
                 <Image
                   src={snippet.user.image || "/placeholder.svg"}
@@ -141,7 +144,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               <span className="font-medium">
                 {snippet.user?.username || "Unknown User"}
               </span>
-            </div>
+            </Link>
 
             <div className="flex items-center gap-1.5 text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full">
               <Clock className="h-3.5 w-3.5" />
@@ -169,7 +172,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
                   {snippet.language}
                 </div>
                 <div className="text-xs text-zinc-400">
-                  {snippet.content.split("\n").length} lines
+                  {snippet.content!.split("\n").length} lines
                 </div>
               </div>
               <div className="rounded-none">
@@ -204,7 +207,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-md border border-border/50 w-fit cursor-pointer hover:bg-muted/70 transition-colors"
+                    className="hidden sm:flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-md border border-border/50 w-fit cursor-pointer hover:bg-muted/70 transition-colors"
                     onClick={() => copySnippetId(snippet.id)}
                   >
                     <span className="text-xs text-muted-foreground">ID:</span>
@@ -218,13 +221,8 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               </Tooltip>
             </TooltipProvider>
 
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="text-xs gap-1.5">
-                <Share2 className="h-4 w-4" />
-                Share
-              </Button>
-
-              <AiExplanationDialog snippetContent={snippet.content} />
+            <div className="flex ">
+              <AiExplanationDialog snippetContent={snippet.content!} />
             </div>
           </div>
         </CardContent>

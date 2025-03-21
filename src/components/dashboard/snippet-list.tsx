@@ -15,7 +15,7 @@ interface PageData {
 }
 
 export function SnippetList() {
-  const observerTarget = useRef<HTMLDivElement>(null);
+  const observerTarget = useRef<HTMLDivElement>(null); //ref of a dom element
 
   const {
     data,
@@ -34,7 +34,7 @@ export function SnippetList() {
         const { data } = await axios.get("/api/snippets", {
           params: {
             page: pageParam,
-            limit: 8,
+            limit: 9,
           },
         });
         return {
@@ -56,19 +56,21 @@ export function SnippetList() {
 
   // Implement intersection observer for automatic loading
   useEffect(() => {
+    // Create an Intersection Observer that watches for an element to become visible
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 } // Trigger when at least 10% of the target element is visible
     );
-
+    // Start observing our target element (if it exists)
     if (observerTarget.current) {
+      // Trigger when at least 10% of the target element is visible
       observer.observe(observerTarget.current);
     }
-
+    // Cleanup function that runs when component unmounts or dependencies change
     return () => {
       if (observerTarget.current) {
         observer.unobserve(observerTarget.current);
@@ -83,6 +85,7 @@ export function SnippetList() {
     }
   }, [error]);
 
+  ///combines multiple snippets array into one from all pages and maps them into new data
   const snippets = data?.pages.flatMap((page) => page.snippets) || [];
 
   return (
@@ -128,12 +131,13 @@ export function SnippetList() {
               <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none" />
             )}
           </div>
-
+          {/* if it is visible for 0.1 or 10% fetch new page */}
           <div ref={observerTarget} className="h-4" />
 
           {hasNextPage && (
             <div className="flex justify-center mt-8 pb-8">
               <Button
+                // fallback functionality
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
                 className="min-w-[160px] rounded-full px-8 py-6 text-base font-medium shadow-md hover:shadow-lg transition-all"
