@@ -109,6 +109,13 @@ export async function GET(
             image: true,
           },
         },
+        Star: {
+          select: {
+            userId: true,
+            id: true,
+            snippetId: true,
+          },
+        },
       },
     });
     if (!snippet) return ApiResponse.notFound("User snippet not found!");

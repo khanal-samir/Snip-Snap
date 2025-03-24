@@ -26,8 +26,9 @@ model User {
   passwordResetTokenExpiry DateTime?
   createdAt                DateTime  @default(now())
   Snippet                  Snippet[]
+  Star                     Star[]
 
-  @@index([username])
+  @@index([id])
 }
 
 model Snippet {
@@ -41,6 +42,19 @@ model Snippet {
   updatedAt   DateTime @updatedAt
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Star        Star[]
 
+  @@index([userId])
+}
+
+model Star {
+  id        String   @id @default(cuid())
+  userId    String
+  snippetId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  snippet   Snippet  @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([snippetId])
   @@index([userId])
 }

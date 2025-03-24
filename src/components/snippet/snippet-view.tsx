@@ -1,14 +1,7 @@
 "use client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import {
-  FileCode,
-  Clock,
-  MessageSquare,
-  Copy,
-  GitFork,
-  Star,
-} from "lucide-react";
+import { FileCode, Clock, MessageSquare, Copy, GitFork } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import CodeEditor from "@/helpers/CodeEditor";
 import SnippetActions from "@/components/snippet/snippet-actions";
@@ -29,6 +22,7 @@ import { useSession } from "next-auth/react";
 import AiExplanationDialog from "../common/ai-explaination";
 import { copySnippetId } from "@/lib/utils";
 import Link from "next/link";
+import StarSnippet from "./StarSnippet";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
   const { data: session }: { data: CustomSession | null } = useSession();
@@ -103,16 +97,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
 
             <div className="flex items-center gap-3">
               {/* //check if user has starred the snippet */}
-              <Button
-                variant="outline"
-                size="sm"
-                className={`gap-2 ${snippet.id ? "bg-primary/10 border-primary/20" : ""}`}
-              >
-                <Star
-                  className={`h-4 w-4 ${snippet.id ? "fill-primary text-primary" : ""}`}
-                />
-                <span>{5}</span>
-              </Button>
+              <StarSnippet snippet={snippet} />
 
               <Button variant="outline" size="sm" className="gap-2">
                 <GitFork className="h-any4 w-4" />

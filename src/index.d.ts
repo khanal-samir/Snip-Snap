@@ -29,6 +29,12 @@ export type CustomUser = {
   username?: string;
 };
 
+export type star = {
+  id?: string;
+  userId?: string;
+  snippetId?: string;
+};
+
 interface ISnippet {
   id: string;
   title: string;
@@ -40,6 +46,7 @@ interface ISnippet {
   updatedAt?: Date;
   userId: string;
   user: CustomUser;
+  Star?: star[];
 }
 export interface CodeEditorProps {
   language?: string;
