@@ -27,6 +27,7 @@ model User {
   createdAt                DateTime  @default(now())
   Snippet                  Snippet[]
   Star                     Star[]
+  Fork                     Fork[]
 
   @@index([id])
 }
@@ -43,6 +44,8 @@ model Snippet {
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Star        Star[]
+  forkedFrom  Fork?    @relation("ForkedFrom")
+  forks       Fork[]   @relation("Forks")
 
   @@index([userId])
 }
@@ -56,5 +59,19 @@ model Star {
   createdAt DateTime @default(now())
 
   @@index([snippetId])
+  @@index([userId])
+}
+
+model Fork {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  originalSnippet Snippet  @relation("Forks", fields: [originalId], references: [id])
+  originalId      String
+  forkedSnippet   Snippet  @relation("ForkedFrom", fields: [forkedId], references: [id])
+  forkedId        String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+
+  @@index([originalId])
   @@index([userId])
 }

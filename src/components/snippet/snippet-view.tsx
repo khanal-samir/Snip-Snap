@@ -1,11 +1,10 @@
 "use client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { FileCode, Clock, MessageSquare, Copy, GitFork } from "lucide-react";
+import { FileCode, Clock, MessageSquare, Copy } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import CodeEditor from "@/helpers/CodeEditor";
 import SnippetActions from "@/components/snippet/snippet-actions";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -23,6 +22,7 @@ import AiExplanationDialog from "../common/ai-explaination";
 import { copySnippetId } from "@/lib/utils";
 import Link from "next/link";
 import StarSnippet from "./StarSnippet";
+import ForkSnippet from "./ForkSnippet";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
   const { data: session }: { data: CustomSession | null } = useSession();
@@ -99,11 +99,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               {/* //check if user has starred the snippet */}
               <StarSnippet snippet={snippet} />
 
-              <Button variant="outline" size="sm" className="gap-2">
-                <GitFork className="h-any4 w-4" />
-                <span>{3}</span>
-              </Button>
-
+              <ForkSnippet snippetId={snippet.id} />
               {isOwner && <SnippetActions snippetId={snippet.id} />}
             </div>
           </div>
