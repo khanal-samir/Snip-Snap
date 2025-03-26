@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "next-auth/react";
 import type { UserProfile, CustomSession } from "@/index";
 import axios from "axios";
+import { StarredSnippetList } from "../star/view-star";
 
 async function fetchUserProfile(userId: string) {
   try {
@@ -118,7 +119,9 @@ export default function ProfileComponent({ userId }: { userId: string }) {
 
         <TabsContent value="snippets" className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Snippets</h2>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              My Snippets
+            </h1>
             <div className="text-sm text-muted-foreground">
               {profile.Snippet.length}{" "}
               {profile.Snippet.length === 1 ? "snippet" : "snippets"}
@@ -142,13 +145,7 @@ export default function ProfileComponent({ userId }: { userId: string }) {
         </TabsContent>
 
         <TabsContent value="starred">
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <Star className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">Starred snippets</h3>
-            <p className="text-muted-foreground mt-1">
-              This feature is coming soon.
-            </p>
-          </div>
+          <StarredSnippetList />
         </TabsContent>
       </Tabs>
     </div>

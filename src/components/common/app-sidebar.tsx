@@ -99,7 +99,7 @@ export function AppSidebar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <SidebarMenuButton asChild tooltip="Starred">
-                    <Link href="#">
+                    <Link href="/star">
                       <Star className="h-5 w-5" />
                       <span>Starred</span>
                     </Link>

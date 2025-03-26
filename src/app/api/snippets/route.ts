@@ -59,6 +59,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const page = Number(queries.get("page")) || 1;
     const skip = (page - 1) * limit; // how many data to skip
     const snippets = await prisma.snippet.findMany({
+      where: {
+        isPublic: true,
+      },
       skip: skip,
       take: limit,
       include: {
