@@ -85,3 +85,13 @@ export interface UserProfile {
     | "user"
   >[];
 }
+
+//star page pagination
+export interface PageData {
+  snippets: ISnippet[];
+  metadata: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+  };
+}

@@ -88,3 +88,48 @@ export const copySnippetId = (id: string) => {
   navigator.clipboard.writeText(id);
   toast.success("Snippet ID copied to clipboard");
 };
+
+// Generate page numbers to display
+export const getPageNumbers = (totalPages: number, currentPage: number) => {
+  const MAX_VISIBLE_PAGES = 5;
+  const pageNumbers = [];
+
+  // If total pages are less than or equal to max visible, show all pages
+  if (totalPages <= MAX_VISIBLE_PAGES) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  // Always add first page
+  pageNumbers.push(1);
+
+  // Determine start and end of middle section
+  let startPage = Math.max(2, currentPage - 1);
+  let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+  // Adjust for pages near the beginning or end
+  if (currentPage <= 3) {
+    endPage = Math.min(totalPages - 1, 4);
+  } else if (currentPage >= totalPages - 2) {
+    startPage = Math.max(2, totalPages - 3);
+  }
+
+  // Add ellipsis before middle section if needed
+  if (startPage > 2) {
+    pageNumbers.push("...");
+  }
+
+  // Add middle section
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
+  // Add ellipsis after middle section if needed
+  if (endPage < totalPages - 1) {
+    pageNumbers.push("...");
+  }
+
+  // Always add last page
+  pageNumbers.push(totalPages);
+
+  return pageNumbers;
+};
