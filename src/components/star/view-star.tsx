@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getPageNumbers } from "@/lib/utils";
 
-const fetchStarredSnippets = async (page: number, limit: number) => {
+export const fetchStarredSnippets = async (page: number, limit: number) => {
   try {
     const { data } = await axios.get("/api/snippets/star", {
       params: {

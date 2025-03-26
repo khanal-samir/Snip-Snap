@@ -32,6 +32,9 @@ export async function GET(
         },
         include: {
           Snippet: {
+            orderBy: {
+              createdAt: "desc",
+            },
             select: {
               title: true,
               description: true,
@@ -65,8 +68,12 @@ export async function GET(
       where: {
         id: user.id,
       },
+
       include: {
         Snippet: {
+          orderBy: {
+            createdAt: "desc",
+          },
           where: { isPublic: true },
           select: {
             title: true,
