@@ -1,12 +1,11 @@
-import ProfileComponent from "@/components/profile/user-profile";
-import React from "react";
+"use client";
 
-export default async function UserPage({
-  params,
-}: {
-  params: { userId: string };
-}) {
-  const { userId } = await params;
+import React from "react";
+import ProfileComponent from "@/components/profile/user-profile";
+
+export default function UserPage({ params }: { params: { userId: string } }) {
+  const { userId } = params;
+
   return (
     <div>
       <ProfileComponent userId={userId} />
