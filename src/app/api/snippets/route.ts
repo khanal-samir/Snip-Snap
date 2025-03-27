@@ -81,7 +81,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     if (!snippets.length) return ApiResponse.notFound("Snippets not found!");
 
     //for inifinte scrolling data
-    const totalsnippets = await prisma.snippet.count();
+    const totalsnippets = await prisma.snippet.count({
+      where: {
+        isPublic: true,
+      },
+    });
     const totalPages = Math.ceil(totalsnippets / limit);
     const hasNextPage = page < totalPages;
     return ApiResponse.success(

@@ -21,3 +21,11 @@ export const snippetSchema = z.object({
 export const starSchema = z.object({
   snippetId: z.string(),
 });
+
+export const searchSchema = z.object({
+  id: z.string().optional(),
+  query: z.string().optional(),
+  language: z.string().optional(),
+  limit: z.number().int().positive().optional().default(9),
+  page: z.number().int().positive().optional().default(1),
+});
