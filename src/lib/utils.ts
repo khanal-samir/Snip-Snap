@@ -133,3 +133,21 @@ export const getPageNumbers = (totalPages: number, currentPage: number) => {
 
   return pageNumbers;
 };
+
+export const LANGUAGES = [
+  "JavaScript",
+  "TypeScript",
+  "Python",
+  "Java",
+  "C#",
+  "PHP",
+  "Ruby",
+  "Go",
+  "Rust",
+  "Swift",
+  "Kotlin",
+  "HTML",
+  "CSS",
+  "SQL",
+  "Shell",
+];

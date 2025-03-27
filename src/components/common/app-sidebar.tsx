@@ -117,7 +117,7 @@ export function AppSidebar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <SidebarMenuButton asChild tooltip="Explore">
-                    <Link href="#">
+                    <Link href="/search">
                       <Compass className="h-5 w-5" />
                       <span>Explore</span>
                     </Link>
