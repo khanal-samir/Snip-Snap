@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import DashboardLink from "../common/DashboardLink";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSnippet } from "@/lib/utils";
 import type { CustomSession, ISnippet } from "@/index";
 import { useSession } from "next-auth/react";
@@ -22,6 +22,7 @@ import AiExplanationDialog from "../common/ai-explaination";
 import { copySnippetId } from "@/lib/utils";
 import Link from "next/link";
 import StarSnippet from "./StarSnippet";
+import { fetchUserProfile } from "../profile/user-profile";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
   const { data: session }: { data: CustomSession | null } = useSession();
@@ -34,6 +35,18 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
     queryFn: () => getSnippet(snippetId),
   });
   const isOwner = session?.user?.id === snippet?.userId;
+
+  const queryClient = useQueryClient();
+  // prefetch data on hover
+  const onHoverPostOneLink = () => {
+    if (snippet) {
+      queryClient.prefetchQuery({
+        //prefetches the data
+        queryKey: ["user", snippet?.userId],
+        queryFn: () => fetchUserProfile(snippet.userId!),
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -106,6 +119,7 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
             <Link
               href={`/user/${snippet.userId}`}
               className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full"
+              onMouseEnter={onHoverPostOneLink}
             >
               {snippet.user?.image ? (
                 <Image

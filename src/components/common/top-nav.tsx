@@ -75,7 +75,7 @@ export function TopNav() {
               <Link href={`/user/${session?.user?.id}`}>Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="#">Starred</Link>
+              <Link href="/star">Starred</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/search">Explore</Link>

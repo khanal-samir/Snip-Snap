@@ -6,9 +6,13 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
   const url = request.nextUrl;
+
+  // Allow password reset with token
   if (url.pathname === "/change-password" && url.searchParams.has("token")) {
     return NextResponse.next();
   }
+
+  // Redirect authenticated users away from auth pages
   if (
     (token &&
       (url.pathname === "/" ||
@@ -20,12 +24,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
+  // Protect private routes
   if (
     !token &&
     (url.pathname.startsWith("/dashboard") ||
       url.pathname.startsWith("/create-snippet") ||
       url.pathname.startsWith("/update-snippet") ||
-      url.pathname.startsWith("/snippet"))
+      url.pathname.startsWith("/snippet") ||
+      url.pathname.startsWith("/star") ||
+      url.pathname.startsWith("/user") ||
+      url.pathname.startsWith("/search"))
   ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -37,10 +45,14 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
+    "/user/:path*",
+    "/search",
     "/create-snippet",
     "/snippet/:path*",
     "/update-snippet/:path*",
     "/dashboard/:path*",
+    "/star/:path*",
+    "/explore/:path*",
     "/register",
     "/login",
     "/forgot-password",

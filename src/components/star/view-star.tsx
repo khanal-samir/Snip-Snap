@@ -10,9 +10,13 @@ import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getPageNumbers } from "@/lib/utils";
 
-export const fetchStarredSnippets = async (page: number, limit: number) => {
+export const fetchStarredSnippets = async (
+  page: number,
+  limit: number,
+  userId: string
+) => {
   try {
-    const { data } = await axios.get("/api/snippets/star", {
+    const { data } = await axios.get(`/api/snippets/star/${userId}`, {
       params: {
         page,
         limit,
@@ -32,7 +36,7 @@ export const fetchStarredSnippets = async (page: number, limit: number) => {
   }
 };
 
-export function StarredSnippetList() {
+export function StarredSnippetList({ userId }: { userId: string }) {
   const [page, setPage] = useState(1);
   const limit = 9;
 
@@ -40,8 +44,8 @@ export function StarredSnippetList() {
     PageData,
     Error
   >({
-    queryKey: ["starred-snippets", page],
-    queryFn: () => fetchStarredSnippets(page, limit),
+    queryKey: ["starred-snippets", userId, page],
+    queryFn: () => fetchStarredSnippets(page, limit, userId),
   });
 
   // Handle errors

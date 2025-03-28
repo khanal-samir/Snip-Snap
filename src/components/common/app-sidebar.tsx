@@ -155,7 +155,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     tooltip="Sign out"
-                    onClick={() => signOut()}
+                    onClick={async () => await signOut()}
                   >
                     <div>
                       <CircleArrowOutUpRight className="h-5 w-5" />

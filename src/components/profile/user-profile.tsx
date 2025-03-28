@@ -14,7 +14,7 @@ import type { UserProfile, CustomSession } from "@/index";
 import axios from "axios";
 import { StarredSnippetList } from "../star/view-star";
 
-async function fetchUserProfile(userId: string) {
+export async function fetchUserProfile(userId: string) {
   try {
     const { data } = await axios(`/api/user/${userId}`);
     return data.data as UserProfile;
@@ -145,7 +145,7 @@ export default function ProfileComponent({ userId }: { userId: string }) {
         </TabsContent>
 
         <TabsContent value="starred">
-          <StarredSnippetList />
+          <StarredSnippetList userId={userId} />
         </TabsContent>
       </Tabs>
     </div>
