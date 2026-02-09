@@ -1,7 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { Calendar, Code, Eye } from "lucide-react";
+import { Calendar, Code, Eye, GitFork } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -32,13 +32,21 @@ export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
       {snippets.map((snippet) => (
         <Card key={snippet.id} className="flex flex-col">
           <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-            <div className="space-y-1">
+            <div className="space-y-1 flex-1 min-w-0">
               <CardTitle className="line-clamp-1 text-base">
                 {snippet.title}
               </CardTitle>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <Code className="mr-1 h-3 w-3" />
-                {snippet.language}
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="flex items-center">
+                  <Code className="mr-1 h-3 w-3" />
+                  {snippet.language}
+                </span>
+                {snippet.forkedFrom && (
+                  <span className="flex items-center text-xs">
+                    <GitFork className="mr-1 h-3 w-3" />
+                    Forked
+                  </span>
+                )}
               </div>
             </div>
             {session?.user?.id === snippet.userId && (
@@ -77,9 +85,17 @@ export default function Snippets({ snippets }: { snippets: ISnippet[] }) {
                   View
                 </Link>
               </Button>
-              <div className="flex items-center text-xs text-muted-foreground">
-                <Calendar className="mr-1 h-3 w-3" />
-                {new Date(snippet.createdAt).toLocaleDateString()}
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                {(snippet._count?.forks ?? snippet.forkCount ?? 0) > 0 && (
+                  <span className="flex items-center" title="Forks">
+                    <GitFork className="mr-1 h-3 w-3" />
+                    {snippet._count?.forks ?? snippet.forkCount}
+                  </span>
+                )}
+                <span className="flex items-center">
+                  <Calendar className="mr-1 h-3 w-3" />
+                  {new Date(snippet.createdAt).toLocaleDateString()}
+                </span>
               </div>
             </div>
           </CardFooter>

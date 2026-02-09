@@ -44,7 +44,14 @@ model Snippet {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Star        Star[]
 
+  // Fork relation - self-referential
+  forkedFromId String?
+  forkedFrom   Snippet?  @relation("ForkRelation", fields: [forkedFromId], references: [id], onDelete: SetNull)
+  forks        Snippet[] @relation("ForkRelation")
+  forkCount    Int       @default(0)
+
   @@index([userId])
+  @@index([forkedFromId])
 }
 
 model Star {

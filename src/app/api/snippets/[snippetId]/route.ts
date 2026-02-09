@@ -116,6 +116,21 @@ export async function GET(
             snippetId: true,
           },
         },
+        forkedFrom: {
+          include: {
+            user: {
+              select: {
+                username: true,
+                id: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            forks: true,
+          },
+        },
       },
     });
     if (!snippet) return ApiResponse.notFound("User snippet not found!");

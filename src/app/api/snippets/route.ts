@@ -72,11 +72,27 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             email: true,
           },
         },
+        forkedFrom: {
+          select: {
+            id: true,
+            title: true,
+            user: {
+              select: {
+                username: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            forks: true,
+            Star: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
       },
-      // have to add include forks,stars
     });
     if (!snippets.length) return ApiResponse.notFound("Snippets not found!");
 

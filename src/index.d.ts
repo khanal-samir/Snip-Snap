@@ -47,6 +47,22 @@ interface ISnippet {
   userId: string;
   user: CustomUser;
   Star?: star[];
+  // Fork-related fields
+  forkedFromId?: string | null;
+  forkedFrom?: {
+    id: string;
+    title: string;
+    user?: {
+      username: string;
+      id?: string;
+    };
+  } | null;
+  forkCount?: number;
+  forks?: ISnippet[];
+  _count?: {
+    forks?: number;
+    Star?: number;
+  };
 }
 export interface CodeEditorProps {
   language?: string;

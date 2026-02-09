@@ -22,6 +22,7 @@ import AiExplanationDialog from "../common/ai-explaination";
 import { copySnippetId } from "@/lib/utils";
 import Link from "next/link";
 import StarSnippet from "./StarSnippet";
+import ForkButton from "./ForkButton";
 import { fetchUserProfile } from "../profile/user-profile";
 
 export default function SnippetView({ snippetId }: { snippetId: string }) {
@@ -104,12 +105,40 @@ export default function SnippetView({ snippetId }: { snippetId: string }) {
               <div className="bg-primary/10 p-2 rounded-md">
                 <FileCode className="h-5 w-5 text-primary" />
               </div>
-              <h2 className="text-xl font-medium">{snippet.title}</h2>
+              <div className="flex flex-col">
+                <h2 className="text-xl font-medium">{snippet.title}</h2>
+                {snippet.forkedFrom && (
+                  <div className="text-sm text-muted-foreground">
+                    Forked from{" "}
+                    <Link
+                      href={`/snippet/${snippet.forkedFrom.id}`}
+                      className="text-primary hover:underline"
+                    >
+                      {snippet.forkedFrom.title}
+                    </Link>
+                    {snippet.forkedFrom.user && (
+                      <>
+                        {" "}
+                        by{" "}
+                        <Link
+                          href={`/user/${snippet.forkedFrom.user.id}`}
+                          className="text-primary hover:underline"
+                        >
+                          {snippet.forkedFrom.user.username}
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center gap-3">
               {/* //check if user has starred the snippet */}
               <StarSnippet snippet={snippet} />
+
+              {/* Fork button */}
+              <ForkButton snippet={snippet} />
 
               {isOwner && <SnippetActions snippetId={snippet.id} />}
             </div>

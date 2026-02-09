@@ -51,4 +51,8 @@ export class ApiResponse {
   ) {
     return new ApiResponse(status, data, message).send();
   }
+
+  static forbidden(message: string = "Access denied") {
+    return new ApiResponse(403, null, message).send();
+  }
 }
